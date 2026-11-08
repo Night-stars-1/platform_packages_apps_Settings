@@ -1,4 +1,8 @@
 /*
+ * SPDX-FileCopyrightText: 2026 The uwuAOSP Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+/*
  * Copyright (C) 2023 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,11 +27,13 @@ import android.provider.Settings
 
 class SystemUpdateRepository(context: Context) {
     private val packageManager = context.packageManager
+    private val context = context
 
     /**
      * Finds a matching activity for the system update intent.
      */
     fun getSystemUpdateIntent(): Intent? {
+        UwuUpdateIntents.get(context)?.let { return it }
         val intent = Intent(Settings.ACTION_SYSTEM_UPDATE_SETTINGS)
         return packageManager.resolveActivity(intent, PackageManager.MATCH_SYSTEM_ONLY)
             ?.activityInfo

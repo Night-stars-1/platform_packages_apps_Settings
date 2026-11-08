@@ -1,3 +1,7 @@
+/*
+ * SPDX-FileCopyrightText: 2026 The uwuAOSP Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
 package com.google.android.settings.update
 
 import android.content.Context
@@ -9,6 +13,7 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceScreen
 import com.android.settings.R
 import com.android.settings.core.BasePreferenceController
+import com.android.settings.system.SystemUpdateRepository
 import com.android.settingslib.DeviceInfoUtils
 import com.android.settingslib.widget.SettingsThemeHelper
 import com.android.settingslib.widget.StatusBannerPreference
@@ -29,6 +34,13 @@ class SystemUpdatePreferenceController(context: Context, preferenceKey: String) 
     override fun displayPreference(screen: PreferenceScreen) {
         super.displayPreference(screen)
         updateUi(screen)
+    }
+
+    override fun handlePreferenceTreeClick(preference: Preference): Boolean {
+        if (preference.key != KEY_SYSTEM_UPDATE_PREFERENCE) return false
+        val intent = SystemUpdateRepository(mContext).getSystemUpdateIntent() ?: return false
+        mContext.startActivity(intent)
+        return true
     }
 
     override fun onResume(owner: LifecycleOwner) {
